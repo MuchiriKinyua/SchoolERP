@@ -18,7 +18,7 @@ class employeesDataTable extends DataTable
     {
         $dataTable = new EloquentDataTable($query);
 
-        return $dataTable->addColumn('action', 'employees.datatables_actions');
+        return $dataTable->addColumn('action', 'admin.employees.datatables_actions');
     }
 
     /**

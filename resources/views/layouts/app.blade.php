@@ -16,6 +16,17 @@
                     </li>
                 </ul>
 
+                <!-- jQuery UI CSS -->
+            <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+
+            <!-- jQuery -->
+            <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+            <!-- jQuery UI -->
+            <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
+
+
+
+
                 <ul class="navbar-nav ml-auto">
                     <li class="nav-item dropdown user-menu">
                         <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">
@@ -68,3 +79,14 @@
         </div>
     </body>
 </x-laravel-ui-adminlte::adminlte-layout>
+
+<script>
+    $(document).ready(function() {
+        $("#date_of_birth").datepicker({
+            dateFormat: "yy-mm-dd", // Format the date to match your database
+            changeMonth: true,
+            changeYear: true,
+            yearRange: "1900:+0" // Change as needed
+        });
+    });
+</script>

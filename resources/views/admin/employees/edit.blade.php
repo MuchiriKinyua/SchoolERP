@@ -6,7 +6,7 @@
             <div class="row mb-2">
                 <div class="col-sm-12">
                     <h1>
-                        Edit Employees
+                        Edit Employee
                     </h1>
                 </div>
             </div>
@@ -19,7 +19,7 @@
 
         <div class="card">
 
-            {!! Form::model($employees, ['route' => ['admin.employees.update', $employees->id], 'method' => 'patch']) !!}
+            {!! Form::model($employee, ['route' => ['admin.employees.update', $employee->id], 'method' => 'patch']) !!}
 
             <div class="card-body">
                 <div class="row">

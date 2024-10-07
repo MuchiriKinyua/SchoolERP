@@ -18,15 +18,18 @@
 
 <!-- Email Field -->
 <div class="form-group col-sm-6">
-    {!! Form::label('email', 'Email:') !!}
-    {!! Form::email('email', null, ['class' => 'form-control', 'required', 'maxlength' => 50]) !!}
-</div>
+        {!! Form::label('email', 'Email:') !!}
+        {!! Form::email('email', null, [
+            'class' => 'form-control',
+            'placeholder' => 'Enter your email',
+            'required' => true,
+            'maxlength' => 50
+        ]) !!}
+        @if ($errors->has('email'))
+            <span class="text-danger">{{ $errors->first('email') }}</span>
+        @endif
+    </div>
 
-<!-- Date Of Birth Field -->
-<div class="form-group col-sm-6">
-    {!! Form::label('date_of_birth', 'Date Of Birth:') !!}
-    {!! Form::text('date_of_birth', null, ['class' => 'form-control','id'=>'date_of_birth']) !!}
-</div>
 
 @push('page_scripts')
     <script type="text/javascript">
@@ -43,11 +46,31 @@
 <!-- Marital Status Field -->
 <div class="form-group col-sm-6">
     {!! Form::label('marital_status', 'Marital Status:') !!}
-    {!! Form::text('marital_status', null, ['class' => 'form-control']) !!}
+    {!! Form::select('marital_status', [
+        '' => 'Select Marital Status', // Placeholder option
+        'single' => 'Single',
+        'married' => 'Married',
+        'divorced' => 'Divorced',
+        'widowed' => 'Widowed',
+        'separated' => 'Separated',
+        'other' => 'Other'
+    ], null, ['class' => 'form-control']) !!}
 </div>
 
 <!-- Gender Field -->
 <div class="form-group col-sm-6">
     {!! Form::label('gender', 'Gender:') !!}
-    {!! Form::text('gender', null, ['class' => 'form-control']) !!}
+    {!! Form::select('gender', [
+        '' => 'Select Gender', // Placeholder option
+        'male' => 'Male',
+        'female' => 'Female',
+        'intersex' => 'Intersex'
+    ], null, ['class' => 'form-control']) !!}
+</div>
+
+<!-- Date Of Birth Field -->
+<div class="form-group col-sm-6">
+    <label for="date_of_birth">Date of Birth</label>
+    <input type="text" name="date_of_birth" id="date_of_birth" class="form-control" 
+           value="{{ old('date_of_birth', isset($employee) ? $employee->date_of_birth : '') }}" required>
 </div>

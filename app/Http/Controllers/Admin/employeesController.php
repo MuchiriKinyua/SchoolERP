@@ -25,7 +25,7 @@ class employeesController extends AppBaseController
      */
     public function index(employeesDataTable $employeesDataTable)
     {
-    return $employeesDataTable->render('employees.index');
+    return $employeesDataTable->render('admin.employees.index');
     }
 
 
