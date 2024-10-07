@@ -19,10 +19,10 @@ return new class extends Migration
             $table->string('middle_name');
             $table->string('surname');
             $table->string('email');
+            $table->date('date_of_birth');
             $table->string('phone_number');
             $table->string('marital_status');
             $table->string('gender');
-            $table->date('date_of_birth');
             $table->timestamps();
         });
     }

@@ -2,11 +2,11 @@
 
 namespace App\DataTables\Admin;
 
-use App\Models\Admin\Employee;
+use App\Models\Admin\employees;
 use Yajra\DataTables\Services\DataTable;
 use Yajra\DataTables\EloquentDataTable;
 
-class EmployeeDataTable extends DataTable
+class employeesDataTable extends DataTable
 {
     /**
      * Build DataTable class.
@@ -24,10 +24,10 @@ class EmployeeDataTable extends DataTable
     /**
      * Get query source of dataTable.
      *
-     * @param \App\Models\Employee $model
+     * @param \App\Models\employees $model
      * @return \Illuminate\Database\Eloquent\Builder
      */
-    public function query(Employee $model)
+    public function query(employees $model)
     {
         return $model->newQuery();
     }
@@ -70,10 +70,10 @@ class EmployeeDataTable extends DataTable
             'middle_name',
             'surname',
             'email',
+            'date_of_birth',
             'phone_number',
             'marital_status',
-            'gender',
-            'date_of_birth'
+            'gender'
         ];
     }
 

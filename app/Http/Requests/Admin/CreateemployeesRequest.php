@@ -2,10 +2,10 @@
 
 namespace App\Http\Requests\Admin;
 
-use App\Models\Admin\Employee;
+use App\Models\Admin\employees;
 use Illuminate\Foundation\Http\FormRequest;
 
-class CreateEmployeeRequest extends FormRequest
+class CreateemployeesRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,6 +24,6 @@ class CreateEmployeeRequest extends FormRequest
      */
     public function rules()
     {
-        return Employee::$rules;
+        return employees::$rules;
     }
 }

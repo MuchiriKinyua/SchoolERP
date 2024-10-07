@@ -5,3 +5,11 @@
         <p>Home</p>
     </a>
 </li>
+
+
+<li class="nav-item">
+    <a href="{{ route('admin.employees.index') }}" class="nav-link {{ Request::is('admin.employees*') ? 'active' : '' }}">
+        <i class="nav-icon fas fa-home"></i>
+        <p>Employees</p>
+    </a>
+</li>

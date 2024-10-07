@@ -24,3 +24,15 @@ Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
+
+
+Route::resource('admin/employees', App\Http\Controllers\Admin\employeesController::class)
+    ->names([
+        'index' => 'admin.employees.index',
+        'store' => 'admin.employees.store',
+        'show' => 'admin.employees.show',
+        'update' => 'admin.employees.update',
+        'destroy' => 'admin.employees.destroy',
+        'create' => 'admin.employees.create',
+        'edit' => 'admin.employees.edit'
+    ]);
