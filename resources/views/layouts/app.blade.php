@@ -1,5 +1,9 @@
 <x-laravel-ui-adminlte::adminlte-layout>
 
+<title>School ERP</title>
+<title>{{ config('app.name') }}</title>
+
+
     <body class="hold-transition sidebar-mini layout-fixed">
         <div class="wrapper">
             <!-- Main Header -->
