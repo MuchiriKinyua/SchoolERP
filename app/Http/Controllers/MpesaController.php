@@ -23,19 +23,27 @@ class MpesaController extends Controller
     $account_number = $request->input('account_number'); // Fetch the account number from the request
 
     try {
+        // Get the access token
+        $accessToken = config('mpesa.access_token');
+        
+        // Request a new access token
+        $accessToken = Mpesa::getAccessToken();
+        Log::info('Access Token: ' . $accessToken);
+
         // Call the STK Push API to create a payment
         $response = Mpesa::stkpush($phone_number, $amount, $account_number); // Pass the necessary parameters
 
         // Log the response for debugging
-        // Convert the response to an array if it's an object
-        Log::info('M-Pesa STK Push Response:', $response->json() ?? (array)$response); // Use json() or cast to array
+        Log::info('M-Pesa STK Push Response: ', (array)$response);
 
         // Check response for success or failure
-        if ($response['success']) {
+        if (isset($response['success']) && $response['success']) {
             return back()->with('success', 'Payment successful!');
         } else {
+            Log::error('M-Pesa STK Push Response Error: ', (array)$response);
             return back()->with('error', 'Payment failed. Please check your details.');
         }
+
     } catch (\Exception $e) {
         Log::error('M-Pesa Payment Error: ' . $e->getMessage());
         return back()->with('error', 'An error occurred while processing your payment.');

@@ -122,4 +122,6 @@ return [
 
     'oauth_endpoint' => env('MPESA_BASE_URL') . '/oauth/v1/generate?grant_type=client_credentials',
 
+    'access_token' => env('MPESA_ACCESS_TOKEN', ''),
+
 ];
