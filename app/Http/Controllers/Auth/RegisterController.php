@@ -10,31 +10,10 @@ use Illuminate\Support\Facades\Validator;
 
 class RegisterController extends Controller
 {
-    /*
-    |--------------------------------------------------------------------------
-    | Register Controller
-    |--------------------------------------------------------------------------
-    |
-    | This controller handles the registration of new users as well as their
-    | validation and creation. By default this controller uses a trait to
-    | provide this functionality without requiring any additional code.
-    |
-    */
-
     use RegistersUsers;
 
-    /**
-     * Where to redirect users after registration.
-     *
-     * @var string
-     */
     protected $redirectTo = '/home';
 
-    /**
-     * Create a new controller instance.
-     *
-     * @return void
-     */
     public function __construct()
     {
         $this->middleware('guest');
@@ -52,21 +31,31 @@ class RegisterController extends Controller
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
             'password' => ['required', 'string', 'min:8', 'confirmed'],
-        ]);
+        ], $this->messages()); // Adding custom messages here
     }
 
     /**
-     * Create a new user instance after a valid registration.
+     * Custom error messages for validation.
      *
-     * @param  array  $data
-     * @return \App\Models\User
+     * @return array
      */
+    protected function messages()
+    {
+        return [
+            'email.email' => 'Enter a valid email address', // Custom email validation message
+        ];
+    }
+
     protected function create(array $data)
     {
-        return User::create([
+        $email = trim($data['email']);
+
+        $user = User::create([
             'name' => $data['name'],
-            'email' => $data['email'],
+            'email' => $email,
             'password' => Hash::make($data['password']),
         ]);
+
+        return $user;
     }
 }
