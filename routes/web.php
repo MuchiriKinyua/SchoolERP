@@ -1,6 +1,8 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\MPESAC2BController;
+use App\Http\Controllers\MpesaSTKPUSHController;
 
 /*
 |--------------------------------------------------------------------------
@@ -20,6 +22,14 @@ Route::get('/', function () {
 Auth::routes([
     'verify' => true
 ]);
+
+Route::post('/v1/mpesatest/stk/push', [MpesaSTKPUSHController::class, 'STKPush']);
+
+Route::post('register-urls', [MPESAC2BController::class, 'registerURLS']);
+
+Route::post('validation', [MPESAC2BController::class, 'validation'])->name('c2b.validate');
+
+Route::post('confirmation', [MPESAC2BController::class, 'confirmation'])->name('c2b.confirm');
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home')->middleware('verified');
 
