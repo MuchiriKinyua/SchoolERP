@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\MPESAC2BController;
 use App\Http\Controllers\MpesaSTKPUSHController;
+use App\Http\Controllers\MpesaController; 
 use App\Http\Controllers\HomeController;
 
 /*
@@ -23,6 +24,8 @@ Route::get('/', function () {
 Auth::routes([
     'verify' => true
 ]);
+
+Route::post('/mpesa/pay', [MpesaController::class, 'pay'])->name('mpesa.pay');
 
 Route::post('/v1/mpesatest/stk/push', [MpesaSTKPUSHController::class, 'STKPush']);
 
