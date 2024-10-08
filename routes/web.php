@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\MPESAC2BController;
 use App\Http\Controllers\MpesaSTKPUSHController;
+use App\Http\Controllers\HomeController;
 
 /*
 |--------------------------------------------------------------------------
@@ -24,6 +25,8 @@ Auth::routes([
 ]);
 
 Route::post('/v1/mpesatest/stk/push', [MpesaSTKPUSHController::class, 'STKPush']);
+
+Route::get('/accounts', function () {return view('accounts');});
 
 Route::post('register-urls', [MPESAC2BController::class, 'registerURLS']);
 

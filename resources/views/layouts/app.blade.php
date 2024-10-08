@@ -4,6 +4,7 @@
 <title>{{ config('app.name') }}</title>
 
 
+
     <body class="hold-transition sidebar-mini layout-fixed">
         <div class="wrapper">
             <!-- Main Header -->
@@ -23,8 +24,6 @@
             <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
             <!-- jQuery UI -->
             <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
-
-
 
 
                 <ul class="navbar-nav ml-auto">
