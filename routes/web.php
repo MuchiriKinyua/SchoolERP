@@ -25,6 +25,8 @@ Auth::routes([
     'verify' => true
 ]);
 
+Route::post('/api/mpesa/callback', [MpesaController::class, 'handleCallback']);
+
 Route::post('/mpesa/pay', [MpesaController::class, 'pay'])->name('mpesa.pay');
 
 Route::post('/v1/mpesatest/stk/push', [MpesaSTKPUSHController::class, 'STKPush']);

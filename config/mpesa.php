@@ -8,13 +8,13 @@ return [
         |The Mpesa Consumer Key
         |------------------------------------------
         */
-    'mpesa_consumer_key' => env('MPESA_CONSUMER_KEY'),
+    'mpesa_consumer_key' => env('MPESA_CONSUMER_KEY', '5oXrVytCB82RM81X39GBJvAJjByOPTAPA70hgUWohTLR6SA5'),
 
     /*-----------------------------------------
         |The Mpesa Consumer Secret
         |------------------------------------------
         */
-    'mpesa_consumer_secret' => env('MPESA_CONSUMER_SECRET'),
+    'mpesa_consumer_secret' => env('MPESA_CONSUMER_SECRET', 'hO6RjppAr0I5NYRvwGFbLJfbhZnJcI4e62Je2fACRTekAAJv8n9h8mLNC7R9fARf'),
 
     /*-----------------------------------------
         |The Lipa na Mpesa Online Passkey
@@ -74,7 +74,7 @@ return [
         |Mpesa Lipa Na Mpesa callback url
         |------------------------------------------
         */
-    'callback_url' => env('MPESA_CALLBACK_URL'),
+    'callback_url' => env('MPESA_CALLBACK_URL', 'http://127.0.0.1:8000/api/mpesa/callback'),
 
     /*-----------------------------------------
         |Mpesa Transaction Status Result url
@@ -119,4 +119,7 @@ return [
     'b2b_result_url' => env('MPESA_B2B_RESULT_URL'),
 
     'b2b_timeout_url' => env('MPESA_B2B_TIMEOUT_URL'),
+
+    'oauth_endpoint' => env('MPESA_BASE_URL') . '/oauth/v1/generate?grant_type=client_credentials',
+
 ];
