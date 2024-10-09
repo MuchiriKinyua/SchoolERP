@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "161c0f4c63779fafb98762028efec51c",
+    "content-hash": "c7195c2e3501544d552a8917aee255ad",
     "packages": [
         {
             "name": "brick/math",
@@ -530,16 +530,16 @@
         },
         {
             "name": "dragonmantank/cron-expression",
-            "version": "v3.3.3",
+            "version": "v3.4.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/dragonmantank/cron-expression.git",
-                "reference": "adfb1f505deb6384dc8b39804c5065dd3c8c8c0a"
+                "reference": "8c784d071debd117328803d86b2097615b457500"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/dragonmantank/cron-expression/zipball/adfb1f505deb6384dc8b39804c5065dd3c8c8c0a",
-                "reference": "adfb1f505deb6384dc8b39804c5065dd3c8c8c0a",
+                "url": "https://api.github.com/repos/dragonmantank/cron-expression/zipball/8c784d071debd117328803d86b2097615b457500",
+                "reference": "8c784d071debd117328803d86b2097615b457500",
                 "shasum": ""
             },
             "require": {
@@ -552,10 +552,14 @@
             "require-dev": {
                 "phpstan/extension-installer": "^1.0",
                 "phpstan/phpstan": "^1.0",
-                "phpstan/phpstan-webmozart-assert": "^1.0",
                 "phpunit/phpunit": "^7.0|^8.0|^9.0"
             },
             "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "3.x-dev"
+                }
+            },
             "autoload": {
                 "psr-4": {
                     "Cron\\": "src/Cron/"
@@ -579,7 +583,7 @@
             ],
             "support": {
                 "issues": "https://github.com/dragonmantank/cron-expression/issues",
-                "source": "https://github.com/dragonmantank/cron-expression/tree/v3.3.3"
+                "source": "https://github.com/dragonmantank/cron-expression/tree/v3.4.0"
             },
             "funding": [
                 {
@@ -587,7 +591,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2023-08-10T19:36:49+00:00"
+            "time": "2024-10-09T13:47:03+00:00"
         },
         {
             "name": "egulias/email-validator",
@@ -1201,6 +1205,19 @@
             "time": "2023-12-03T19:50:20+00:00"
         },
         {
+            "name": "iankumu/mpesa",
+            "version": "1.3.6",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/Iankumu/mpesa.git",
+                "reference": "cd9dd65c667faca8d436c8a1eafe0ae089b4fd22"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/Iankumu/mpesa/zipball/cd9dd65c667faca8d436c8a1eafe0ae089b4fd22",
+                "reference": "cd9dd65c667faca8d436c8a1eafe0ae089b4fd22",
+                "shasum": ""
+            },
             "require": {
                 "guzzlehttp/guzzle": "^7.5",
                 "illuminate/http": "^8.0 | ^9.0 | ^10.0 | ^11.0",
@@ -1213,6 +1230,21 @@
                 "phpunit/phpunit": "^9.0 | ^10.0 | ^11.0"
             },
             "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Iankumu\\Mpesa\\MpesaServiceProvider"
+                    ],
+                    "aliases": {
+                        "Mpesa": "Iankumu\\Mpesa\\Facades\\Mpesa"
+                    }
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Iankumu\\Mpesa\\": "src/"
+                }
+            },
             "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "MIT"
@@ -1225,6 +1257,18 @@
                     "role": "Developer"
                 }
             ],
+            "description": "A package that helps integrate the Mpesa APIs to your Laravel Project",
+            "homepage": "https://github.com/Iankumu/mpesa",
+            "keywords": [
+                "laravel",
+                "laravel mpesa",
+                "laravel-mpesa",
+                "mpesa"
+            ],
+            "support": {
+                "issues": "https://github.com/Iankumu/mpesa/issues",
+                "source": "https://github.com/Iankumu/mpesa/tree/1.3.6"
+            },
             "time": "2024-05-17T13:26:25+00:00"
         },
         {
@@ -3841,6 +3885,49 @@
                 }
             ],
             "time": "2024-04-27T21:32:50+00:00"
+        },
+        {
+            "name": "safaricom/mpesa",
+            "version": "1.0.8",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/safaricom/mpesa-php-sdk.git",
+                "reference": "c66895dcdec8df1f496e017708c557fc252340c5"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/safaricom/mpesa-php-sdk/zipball/c66895dcdec8df1f496e017708c557fc252340c5",
+                "reference": "c66895dcdec8df1f496e017708c557fc252340c5",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.0"
+            },
+            "require-dev": {
+                "symfony/dotenv": "^4.3@dev"
+            },
+            "type": "package",
+            "autoload": {
+                "psr-4": {
+                    "Safaricom\\Mpesa\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "mit"
+            ],
+            "authors": [
+                {
+                    "name": "Moses Nandwa",
+                    "email": "mnandwa@safaricom.co.ke"
+                }
+            ],
+            "description": "A PHP package for Mpesa API",
+            "support": {
+                "issues": "https://github.com/safaricom/mpesa-php-sdk/issues",
+                "source": "https://github.com/safaricom/mpesa-php-sdk/tree/master"
+            },
+            "time": "2019-01-06T16:01:21+00:00"
         },
         {
             "name": "symfony/console",
@@ -9117,7 +9204,7 @@
     "prefer-stable": true,
     "prefer-lowest": false,
     "platform": {
-        "php": "^8.1"
+        "php": "^8.0|^8.1|^8.2"
     },
     "platform-dev": [],
     "plugin-api-version": "2.6.0"

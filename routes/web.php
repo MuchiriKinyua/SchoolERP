@@ -26,6 +26,8 @@ Auth::routes([
 
 Route::post('/mpesa/pay', [MpesaController::class, 'pay'])->name('mpesa.pay');
 
+Route::get('/mpesa/stk-push', [MpesaController::class, 'initiateStkPush']);
+
 Route::post('/check-email', [UserController::class, 'checkUserEmail']);
 
 Route::get('/accounts', function () {return view('accounts');});
