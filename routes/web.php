@@ -5,6 +5,7 @@ use App\Http\Controllers\MPESAC2BController;
 use App\Http\Controllers\MpesaSTKPUSHController;
 use App\Http\Controllers\MpesaController; 
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\UserController;
 
 /*
 |--------------------------------------------------------------------------
@@ -24,6 +25,8 @@ Route::get('/', function () {
 Auth::routes([
     'verify' => true
 ]);
+
+Route::post('/check-email', [UserController::class, 'checkUserEmail']);
 
 Route::post('/api/mpesa/callback', [MpesaController::class, 'handleCallback']);
 
