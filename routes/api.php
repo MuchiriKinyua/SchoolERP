@@ -2,7 +2,6 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\MpesaSTKPUSHController;
 
 /*
 |--------------------------------------------------------------------------
@@ -18,8 +17,3 @@ use App\Http\Controllers\MpesaSTKPUSHController;
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
-
-Route::post('/mpesatest/stk/push', [MpesaController::class, 'stkPush']);
-
-
-Route::post('v1/confirm', [MpesaSTKPUSHController::class, 'STKConfirm'])->name('mpesa.confirm');

@@ -1,11 +1,9 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\MPESAC2BController;
-use App\Http\Controllers\MpesaSTKPUSHController;
-use App\Http\Controllers\MpesaController; 
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\MpesaController;
 
 /*
 |--------------------------------------------------------------------------
@@ -26,21 +24,11 @@ Auth::routes([
     'verify' => true
 ]);
 
-Route::post('/check-email', [UserController::class, 'checkUserEmail']);
-
-Route::post('/api/mpesa/callback', [MpesaController::class, 'handleCallback']);
-
 Route::post('/mpesa/pay', [MpesaController::class, 'pay'])->name('mpesa.pay');
 
-Route::post('/v1/mpesatest/stk/push', [MpesaSTKPUSHController::class, 'STKPush']);
+Route::post('/check-email', [UserController::class, 'checkUserEmail']);
 
 Route::get('/accounts', function () {return view('accounts');});
-
-Route::post('register-urls', [MPESAC2BController::class, 'registerURLS']);
-
-Route::post('validation', [MPESAC2BController::class, 'validation'])->name('c2b.validate');
-
-Route::post('confirmation', [MPESAC2BController::class, 'confirmation'])->name('c2b.confirm');
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home')->middleware('verified');
 
