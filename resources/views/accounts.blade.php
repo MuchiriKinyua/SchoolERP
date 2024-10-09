@@ -3,7 +3,7 @@
 @section('content') 
 <div class="container">
     <h1>Accounts Page</h1>
-    <form action="{{ route('mpesa.pay') }}" method="POST">
+    <form action="{{ route('pay') }}" method="POST">
         @csrf
         <div class="form-group">
             <label for="first_name">First Name</label>
