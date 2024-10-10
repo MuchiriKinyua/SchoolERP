@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\MpesaController;
+use App\Http\Controllers\PaymentController;
 
 /*
 |--------------------------------------------------------------------------
@@ -28,12 +29,11 @@ Route::post('/mpesa/pay', [MpesaController::class, 'pay'])->name('mpesa.pay');
 
 Route::post('/api/mpesa/callback', [MpesaController::class, 'callback'])->name('mpesa.callback');
 
-Route::get('/payments/token', [MpesaController::class, 'token'])->name('payments.token');
-
-Route::controller(MpesaController::class)
+Route::controller(PaymentController::class)
     ->prefix('payments')
     ->as('payments.')
     ->group(function () {
+        Route::get('/initiatepush', 'initiateStkPush')->name('initiatepush');
         Route::get('/token', 'token')->name('token');
     });
 
