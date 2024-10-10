@@ -3,7 +3,6 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\UserController;
-use App\Http\Controllers\MpesaController;
 use App\Http\Controllers\PaymentController;
 
 /*
@@ -29,7 +28,7 @@ Route::get('/mpesa/pay', [MpesaController::class, 'pay'])->name('mpesa.pay');
 
 Route::get('/api/mpesa/callback', [MpesaController::class, 'callback'])->name('mpesa.callback');
 
-Route::controller(MpesaController::class)
+Route::controller(PaymentController::class)
     ->prefix('payments')
     ->as('payments.')
     ->group(function () {

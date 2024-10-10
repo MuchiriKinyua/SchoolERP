@@ -10,12 +10,14 @@ class Transaction extends Model
     use HasFactory;
 
     protected $fillable = [
-        'first_name',
-        'last_name',
         'phone',
         'account_number',
         'amount',
-        'transaction_id', // Optional
+        'merchant_request_id',
+        'checkout_request_id',
+        'mpesa_receipt_number',
+        'status',
     ];
 }
+
 
