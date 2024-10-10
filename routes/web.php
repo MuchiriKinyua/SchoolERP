@@ -25,11 +25,11 @@ Auth::routes([
     'verify' => true
 ]);
 
-Route::post('/mpesa/pay', [MpesaController::class, 'pay'])->name('mpesa.pay');
+Route::get('/mpesa/pay', [MpesaController::class, 'pay'])->name('mpesa.pay');
 
-Route::post('/api/mpesa/callback', [MpesaController::class, 'callback'])->name('mpesa.callback');
+Route::get('/api/mpesa/callback', [MpesaController::class, 'callback'])->name('mpesa.callback');
 
-Route::controller(PaymentController::class)
+Route::controller(MpesaController::class)
     ->prefix('payments')
     ->as('payments.')
     ->group(function () {
