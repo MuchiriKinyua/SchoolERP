@@ -1,6 +1,7 @@
 <x-laravel-ui-adminlte::adminlte-layout>
+<link rel="stylesheet" href="{{ asset('css/style.css') }}">
 
-    <body class="hold-transition register-page">
+    <body class="register-page">
         <div class="register-box">
             <div class="register-logo">
                 <a href="{{ url('/home') }}"><b>{{ config('app.name') }}</b></a>
