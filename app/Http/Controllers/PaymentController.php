@@ -14,7 +14,7 @@ class PaymentController extends Controller
         $consumerSecret = '4jKkpLL6OV4XSwD4XejopCANUojMPsabJeGXRDRw0ndB6qf4cnmLLHaoKedmO8sR';
         $url = 'https://sandbox.safaricom.co.ke/oauth/v1/generate?grant_type=client_credentials';
     
-        // Make a POST request with Basic Auth
+        
         $response = Http::withBasicAuth($consumerKey, $consumerSecret)->get($url);
         return $response['access_token'];
     }
@@ -28,15 +28,14 @@ class PaymentController extends Controller
         $password = base64_encode($BusinessShortCode.$passkey.$Timestamp);
         $TransactionType = 'CustomerPayBillOnline';
     
-        // Use data from the form
         $Amount = $request->input('amount');
-        $PartyA = $request->input('phone'); // Customer's phone number
+        $PartyA = $request->input('phone');
         $AccountReference = $request->input('account_number');
         $TransactionDesc = 'Payment for goods';
         
-        $CallbackUrl = 'https://www.e-skuli.co.ke/payments'; // Define your callback URL here
+        $CallbackUrl = 'https://www.e-skuli.co.ke/payments'; 
     
-        // Make the request to Safaricom
+
         $response = Http::withToken($accessToken)->post($url, [
             'BusinessShortCode' => $BusinessShortCode,
             'Password' => $password,

@@ -24,7 +24,7 @@ Auth::routes([
     'verify' => true
 ]);
 
-Route::get('/mpesa/pay', [MpesaController::class, 'pay'])->name('mpesa.pay');
+// Route::get('/mpesa/pay', [MpesaController::class, 'pay'])->name('mpesa.pay');
 
 Route::get('/api/mpesa/callback', [MpesaController::class, 'callback'])->name('mpesa.callback');
 
