@@ -37,6 +37,8 @@ Route::controller(PaymentController::class)
         Route::post('/stkcallback', 'stkCallback')->name('stkcallback');
     });
 
+Route::post('/payments/stkcallback', [PaymentController::class, 'stkCallback']);
+
 Route::post('/check-email', [UserController::class, 'checkUserEmail']);
 
 Route::post('/payments', [PaymentController::class, 'callback']);

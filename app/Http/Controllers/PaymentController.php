@@ -44,7 +44,8 @@ class PaymentController extends Controller
         $Amount = $request->input('amount');
         $AccountReference = $request->input('account_number');
         $TransactionDesc = 'Payment for goods';
-        $CallbackUrl = 'https://9ef2-196-207-169-62.ngrok-free.app/payments/stkcallback'; 
+        $CallbackUrl = 'https://5609-196-207-169-62.ngrok-free.app/payments/stkcallback';
+ 
 
         // Ensure PartyB is set to BusinessShortCode
         $PartyB = (string)$BusinessShortCode; // Set PartyB to your Business Shortcode
@@ -124,11 +125,9 @@ class PaymentController extends Controller
                 'merchant_request_id' => $data['Body']['stkCallback']['MerchantRequestID'], // Save merchant request ID
                 'checkout_request_id' => $data['Body']['stkCallback']['CheckoutRequestID'], // Save checkout request ID
                 'mpesa_receipt_number' => $mpesaReference, // M-Pesa receipt number
-                'payment_date' => $paymentDate, // Payment date
                 'status' => 'successful', // Mark as successful
                 'account_number' => $accountNumber, // Add account number
-            ]);
-            
+            ]);            
     
             return response()->json(['message' => 'Transaction recorded successfully'], 200);
         } else {
@@ -137,4 +136,23 @@ class PaymentController extends Controller
             return response()->json(['message' => 'Transaction failed'], 400);
         }
     }     
+    public function stkQuery(){
+        $accessToken=$this->token();
+        $BusinessShortCode=174379;
+        $PassKey='bfb279f9aa9bdbcf158e97dd71a467cd2e0c893059b10f78e6b72ada1ed2c919';
+        $url='https://sandbox.safaricom.co.ke/mpesa/stkpushquery/v1/query';
+        $Timestamp=Carbon::now()->format('YmdHis');
+        $Password=base64_encode($BusinessShortCode.$PassKey.$Timestamp);
+        $CheckoutRequestID='ws_CO_11102024130250238745416760';
+
+        $response=Http::withToken($accessToken)->post($url,[
+
+            'BusinessShortCode'=>$BusinessShortCode,
+            'Timestamp'=>$Timestamp,
+            'Password'=>$Password,
+            'CheckoutRequestID'=>$CheckoutRequestID
+        ]);
+
+        return $response;
+    }
 }
