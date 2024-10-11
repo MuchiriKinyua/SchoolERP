@@ -34,9 +34,14 @@ Route::controller(PaymentController::class)
     ->group(function () {
         Route::get('/initiatepush', 'initiateStkPush')->name('initiatepush');
         Route::get('/token', 'token')->name('token');
+        Route::post('/stkcallback', 'stkCallback')->name('stkcallback');
     });
 
 Route::post('/check-email', [UserController::class, 'checkUserEmail']);
+
+Route::post('/payments', [PaymentController::class, 'callback']);
+
+Route::post('/initiatepush', [PaymentController::class, 'initiateStkPush']);
 
 Route::get('/accounts', function () {return view('accounts');});
 

@@ -1,9 +1,9 @@
 <x-laravel-ui-adminlte::adminlte-layout>
 
-<title>School ERP</title>
-<title>{{ config('app.name') }}</title>
+    <title>School ERP</title>
+    <title>{{ config('app.name') }}</title>
 
-
+    <!-- <meta name="csrf-token" content="{{ csrf_token() }}">  -->
 
     <body class="hold-transition sidebar-mini layout-fixed">
         <div class="wrapper">
@@ -18,13 +18,12 @@
                 </ul>
 
                 <!-- jQuery UI CSS -->
-            <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+                <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
 
-            <!-- jQuery -->
-            <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-            <!-- jQuery UI -->
-            <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
-
+                <!-- jQuery -->
+                <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+                <!-- jQuery UI -->
+                <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
 
                 <ul class="navbar-nav ml-auto">
                     <li class="nav-item dropdown user-menu">
