@@ -34,10 +34,10 @@ Route::controller(PaymentController::class)
     ->group(function () {
         Route::get('/initiatepush', 'initiateStkPush')->name('initiatepush');
         Route::get('/token', 'token')->name('token');
-        Route::post('/stkcallback', 'stkCallback')->name('stkcallback');
+        Route::post('/stkCallback', 'stkCallback')->name('stkcallback');
     });
 
-Route::post('/payments/stkcallback', [PaymentController::class, 'stkCallback']);
+Route::post('/payments/stkCallback', [PaymentController::class, 'stkCallback']);
 
 Route::post('/check-email', [UserController::class, 'checkUserEmail']);
 
