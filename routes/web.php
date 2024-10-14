@@ -35,6 +35,11 @@ Route::controller(PaymentController::class)
         Route::get('/initiatepush', 'initiateStkPush')->name('initiatepush');
         Route::get('/token', 'token')->name('token');
         Route::post('/stkCallback', 'stkCallback')->name('stkCallback');
+        Route::get('/stkquery', 'stkQuery')->name('stkquery');
+        Route::get('/registerurl', 'registerurl')->name('registerurl');
+        Route::post('/validation', 'Validation')->name('validation');
+        Route::post('/confirmation', 'Confirmation')->name('confirmation');
+        Route::get('/simulate', 'Simulate')->name('simulate');
     });
 
 Route::post('/payments/stkCallback', [PaymentController::class, 'stkCallback']);

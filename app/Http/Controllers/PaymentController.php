@@ -2,31 +2,26 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\C2brequest;
+use App\Models\Stkrequest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
-use Illuminate\Support\Facades\Storage;
 use Carbon\Carbon;
-use App\Models\Transaction;
-use App\Models\Stkrequest;
+use Illuminate\Support\Facades\Storage;
+use Throwable;
 
 class PaymentController extends Controller
 {
-    public function token() {
-        $consumerKey = 'giv5UaFWPIKILI1BkHXEOVFONfthoQldVBcOto2T3OcgeKMF';
-        $consumerSecret = '4jKkpLL6OV4XSwD4XejopCANUojMPsabJeGXRDRw0ndB6qf4cnmLLHaoKedmO8sR';
-        $url = 'https://sandbox.safaricom.co.ke/oauth/v1/generate?grant_type=client_credentials';
+   public function token(){
+    $consumerkey='DwTKiQJMEO7fH20yFLAwDEdTIgUs2QMofz4lxwBBGJoaC7Hq';
+    $consumerSecret='9MU7cDOrodVAZXsRw8DEDu3BZweMSpPZy8xwuGjeR05yGtj04TrYLkowEkbeSDGG';
+    $url='https://sandbox.safaricom.co.ke/oauth/v1/generate?grant_type=client_credentials';
 
-        $response = Http::withBasicAuth($consumerKey, $consumerSecret)->get($url);
-        
-        if ($response->failed()) {
-            \Log::error('Failed to get access token: ', $response->json());
-            return response()->json(['error' => 'Unable to get access token.'], 500);
-        }
+    $response=Http::withBasicAuth($consumerkey,$consumerSecret)->get($url);
+    return $response['access_token'];
+   }
 
-        return $response['access_token'];
-    }
-
-    public function initiateStkPush(){
+   public function initiateStkPush(){
         $accessToken=$this->token();
         $url='https://sandbox.safaricom.co.ke/mpesa/stkpush/v1/processrequest';
         $PassKey='bfb279f9aa9bdbcf158e97dd71a467cd2e0c893059b10f78e6b72ada1ed2c919';
@@ -35,10 +30,10 @@ class PaymentController extends Controller
         $password=base64_encode($BusinessShortCode.$PassKey.$Timestamp);
         $TransactionType='CustomerPayBillOnline';
         $Amount=1;
-        $PartyA=2547130306077;
+        $PartyA=254713030677;
         $PartyB='174379';
-        $PhoneNumber=254713030677;
-        $CallBackURL='https://b7ab-196-207-169-62.ngrok-free.app/payments/stkCallback';
+        $PhoneNumber=254745416760;
+        $CallBackURL='https://2685-196-207-169-62.ngrok-free.app/payments/stkCallback';
         $AccountReference='Room DECO';
         $TransactionDesc='payment for goods';
 
@@ -82,7 +77,6 @@ class PaymentController extends Controller
               return $CustomerMessage;
         }
     }
-    
 
     public function stkCallback() {
         $data=file_get_contents('php://input');
@@ -121,24 +115,135 @@ class PaymentController extends Controller
 
         }
 
-    } 
+    }
+
+public function stkQuery(){
+        $accessToken=$this->token();
+        $BusinessShortCode=174379;
+        $PassKey='bfb279f9aa9bdbcf158e97dd71a467cd2e0c893059b10f78e6b72ada1ed2c919';
+        $url='https://sandbox.safaricom.co.ke/mpesa/stkpushquery/v1/query';
+        $Timestamp=Carbon::now()->format('YmdHis');
+        $Password=base64_encode($BusinessShortCode.$PassKey.$Timestamp);
+        $CheckoutRequestID='ws_CO_11102024130250238745416760';
+
+        $response=Http::withToken($accessToken)->post($url,[
+
+            'BusinessShortCode'=>$BusinessShortCode,
+            'Timestamp'=>$Timestamp,
+            'Password'=>$Password,
+            'CheckoutRequestID'=>$CheckoutRequestID
+        ]);
+
+        return $response;
+    }
+    public function registerUrl(){
+        $accessToken=$this->token();
+        $url='https://sandbox.safaricom.co.ke/mpesa/c2b/v1/registerurl';
+        $ShortCode=600997;
+        $ResponseType='Completed';  //Cancelled
+        $ConfirmationURL='https://2685-196-207-169-62.ngrok-free.app/payments/confirmation';
+        $ValidationURL='https://2685-196-207-169-62.ngrok-free.app/payments/validation';
+
+        $response=Http::withToken($accessToken)->post($url,[
+            'ShortCode'=>$ShortCode,
+            'ResponseType'=>$ResponseType,
+            'ConfirmationURL'=>$ConfirmationURL,
+            'ValidationURL'=>$ValidationURL
+        ]);
+
+        return $response;
+    }
+    public function Simulate(){
+        $accessToken=$this->token();
+        $url='https://sandbox.safaricom.co.ke/mpesa/c2b/v1/simulate';
+        $ShortCode=600992;
+        $CommandID='CustomerPayBillOnline'; 
+        $Amount=1;
+        $Msisdn=254708374149;
+        $BillRefNumber='00000';
+
+        $response=Http::withToken($accessToken)->post($url,[
+            'ShortCode'=>$ShortCode,
+            'CommandID'=>$CommandID,
+            'Amount'=>$Amount,
+            'Msisdn'=>$Msisdn,
+            'BillRefNumber'=>$BillRefNumber
+        ]);
+
+        return $response;
+
+    }
+
+    public function Validation(){
+        $data=file_get_contents('php://input');
+        Storage::disk('local')->put('validation.txt',$data);
+
+        //validation logic
+        return response()->json([
+            'ResultCode'=>0,
+            'ResultDesc'=>'Accepted'
+        ]);
+        
+        /*
+        return response()->json([
+            'ResultCode'=>'C2B00012', (invalid account number)
+            'ResultDesc'=>'Rejected'
+        ])
+        */
+    }
+    public function Confirmation() {
+        $data = file_get_contents('php://input');
+        Storage::disk('local')->put('confirmation.txt', $data);
+        
+        $response = json_decode($data);
+        
+        // Check for JSON decoding errors
+        if (json_last_error() !== JSON_ERROR_NONE) {
+            \Log::error('JSON decode error: ' . json_last_error_msg());
+            return response()->json(['message' => 'Invalid JSON data'], 400);
+        }
     
-//  public function stkQuery() {
-//      $accessToken = $this->token();
-//      $BusinessShortCode = 174379;
-//      $passkey = 'bfb279f9aa9bdbcf158e97dd71a467cd2e0c893059b10f78e6b72ada1ed2c919';
-//      $url = 'https://sandbox.safaricom.co.ke/mpesa/stkpushquery/v1/query';
-//      $Timestamp = Carbon::now()->format('YmdHis');
-//      $Password = base64_encode($BusinessShortCode . $passkey . $Timestamp);
-//      $CheckoutRequestID = 'ws_CO_11102024130250238745416760'; // Replace with the actual CheckoutRequestID
-
-//      $response = Http::withToken($accessToken)->post($url, [
-//          'BusinessShortCode' => $BusinessShortCode,
-//          'Timestamp' => $Timestamp,
-//          'Password' => $Password,
-//          'CheckoutRequestID' => $CheckoutRequestID
-//      ]);
-
-//      return $response->json();
-//  }
+        // Check if $response is null
+        if ($response === null) {
+            return response()->json(['message' => 'No data received'], 400);
+        }
+    
+        // Extract data from response
+        $TransactionType = $response->TransactionType;
+        $TransID = $response->TransID;
+        $TransTime = $response->TransTime;
+        $TransAmount = $response->TransAmount;
+        $BusinessShortCode = $response->BusinessShortCode;
+        $BillRefNumber = $response->BillRefNumber;
+        $InvoiceNumber = $response->InvoiceNumber;
+        $OrgAccountBalance = $response->OrgAccountBalance !== "" ? $response->OrgAccountBalance : null; // Check for empty string
+        $ThirdPartyTransID = $response->ThirdPartyTransID;
+        $MSISDN = $response->MSISDN;
+        $FirstName = $response->FirstName;
+        $MiddleName = $response->MiddleName;
+        $LastName = $response->LastName;
+    
+        // Save data to database
+        $c2b = new C2brequest;
+        $c2b->TransactionType = $TransactionType;
+        $c2b->TransID = $TransID;
+        $c2b->TransTime = $TransTime;
+        $c2b->TransAmount = $TransAmount;
+        $c2b->BusinessShortCode = $BusinessShortCode;
+        $c2b->BillRefNumber = $BillRefNumber;
+        $c2b->InvoiceNumber = $InvoiceNumber;
+        $c2b->OrgAccountBalance = $OrgAccountBalance; // Now can be NULL if empty
+        $c2b->ThirdPartyTransID = $ThirdPartyTransID;
+        $c2b->MSISDN = $MSISDN;
+        $c2b->FirstName = $FirstName;
+        $c2b->MiddleName = $MiddleName;
+        $c2b->LastName = $LastName;
+        $c2b->save();
+        
+        return response()->json([
+            'ResultCode' => 0,
+            'ResultDesc' => 'Accepted'
+        ]);
+    }    
+    
 }
