@@ -238,6 +238,72 @@ public function stkQuery(){
         ]);
         
     }
+    
+    public function qrcode() {
+        $consumerKey = config('safaricom.consumer_key');
+        $consumerSecret = config('safaricom.consumer_secret');
+        $env = config('safaricom.env');
+        
+        // Determine the correct URL based on the environment
+        $authUrl = $env === 'sandbox' 
+            ? 'https://sandbox.safaricom.co.ke/oauth/v1/generate?grant_type=client_credentials'
+            : 'https://api.safaricom.co.ke/oauth/v1/generate?grant_type=client_credentials';
+    
+        // Get access token
+        $request = Http::withBasicAuth($consumerKey, $consumerSecret)->get($authUrl);
+     
+        // Check if the access token was retrieved successfully
+        if (!$request->successful() || !isset($request['access_token'])) {
+            \Log::error('Access token retrieval failed', [
+                'status' => $request->status(),
+                'body' => $request->json()
+            ]);
+            return response()->json([
+                'error' => 'Unable to retrieve access token.',
+                'details' => $request->json()
+            ], 500);
+        }
+    
+        // Access token successfully retrieved
+        $accessToken = $request['access_token'];
+    
+        // Prepare data for QR code generation
+        $MerchantName = 'ESKULI REVISION';
+        $RefNo = 'gggssgss';
+        $Amount = 1;
+        $TrxCode = 'PB'; // Ensure $TrxCode is correctly spelled
+        $CPI = 572555;
+        $url = $env === 'sandbox' 
+            ? 'https://sandbox.safaricom.co.ke/mpesa/qrcode/v1/generate' 
+            : 'https://api.safaricom.co.ke/mpesa/qrcode/v1/generate';
+    
+        // Generate QR code
+        $response = Http::withToken($accessToken)->post($url, [
+            'MerchantName' => $MerchantName,
+            'RefNo' => $RefNo,
+            'Amount' => $Amount,
+            'TrxCode' => $TrxCode,
+            'CPI' => $CPI
+        ]);
+    
+        // Check if the QR code generation request was successful
+        if (!$response->successful()) {
+            \Log::error('QR code generation failed', [
+                'status' => $response->status(),
+                'body' => $response->json(),
+                'requestId' => $response->header('X-Request-Id'),
+                'rawBody' => $response->body() // Log the raw body of the response
+            ]);
+        return response()->json([
+            'error' => 'Unable to generate QR code.',
+            'details' => $response->json()
+    ], 500);
+}
 
     
-}
+        // Return the QR code response
+        return response()->json($response->json());
+    }
+    
+        
+    }

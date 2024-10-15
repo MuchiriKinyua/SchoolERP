@@ -40,6 +40,7 @@ Route::controller(PaymentController::class)
         Route::post('/validation', 'Validation')->name('validation');
         Route::post('/confirmation', 'Confirmation')->name('confirmation');
         Route::get('/simulate', 'Simulate')->name('simulate');
+        Route::get('/qrcode', 'qrcode')->name('qrcode');
     });
 
 Route::post('/payments/stkCallback', [PaymentController::class, 'stkCallback']);
