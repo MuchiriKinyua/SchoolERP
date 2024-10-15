@@ -24,7 +24,7 @@ Auth::routes([
     'verify' => true
 ]);
 
-// Route::get('/mpesa/pay', [MpesaController::class, 'pay'])->name('mpesa.pay');
+Route::get('/mpesa/pay', [MpesaController::class, 'pay'])->name('mpesa.pay');
 
 Route::get('/api/mpesa/callback', [MpesaController::class, 'callback'])->name('mpesa.callback');
 
@@ -32,7 +32,7 @@ Route::controller(PaymentController::class)
     ->prefix('payments')
     ->as('payments.')
     ->group(function () {
-        Route::get('/initiatepush', 'initiateStkPush')->name('initiatepush');
+        Route::post('/initiatepush', 'initiateStkPush')->name('initiatepush');
         Route::get('/token', 'token')->name('token');
         Route::post('/stkCallback', 'stkCallback')->name('stkCallback');
         Route::get('/stkquery', 'stkQuery')->name('stkquery');
@@ -48,7 +48,7 @@ Route::post('/check-email', [UserController::class, 'checkUserEmail']);
 
 Route::post('/payments', [PaymentController::class, 'callback']);
 
-Route::post('/initiatepush', [PaymentController::class, 'initiateStkPush']);
+Route::get('/initiatepush', [PaymentController::class, 'initiateStkPush']);
 
 Route::get('/accounts', function () {return view('accounts');});
 

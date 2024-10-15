@@ -3,7 +3,7 @@
 @section('content') 
 <div class="container">
     <h1>Accounts Page</h1>
-    <form action="{{ route('payments.initiatepush') }}" method="GET">
+    <form action="{{ route('payments.initiatepush') }}" method="POST">
         @csrf
         <div class="form-group">
             <label for="phone">Phone Number</label>
