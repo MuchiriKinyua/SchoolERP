@@ -41,9 +41,14 @@ Route::controller(PaymentController::class)
         Route::post('/confirmation', 'Confirmation')->name('confirmation');
         Route::get('/simulate', 'Simulate')->name('simulate');
         Route::get('/qrcode', 'qrcode')->name('qrcode');
+        Route::get('/b2c', 'b2c')->name('b2c');
+        Route::get('/b2cresult', 'b2cResult')->name('b2cresult');
+        Route::get('/b2ctimeout', 'b2cTimeout')->name('b2ctimeout');
     });
 
-Route::post('/payments/stkCallback', [PaymentController::class, 'stkCallback']);
+Route::post('/payments/stkcallback', [PaymentController::class, 'stkCallback']);
+
+Route::post('/generate-qr', [PaymentController::class, 'generateQRCode']);
 
 Route::post('/check-email', [UserController::class, 'checkUserEmail']);
 

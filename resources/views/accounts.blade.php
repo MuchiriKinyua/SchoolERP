@@ -3,6 +3,7 @@
 @section('content') 
 <div class="container">
     <h1>Accounts Page</h1>
+
     <form action="{{ route('payments.initiatepush') }}" method="POST">
         @csrf
         <div class="form-group">
@@ -19,13 +20,13 @@
         </div>
         <button type="submit" class="btn btn-primary">Pay</button>
     </form>
+
+    <!-- Display success or error messages -->
+    @if(session('success'))
+        <div class="alert alert-success mt-3">{{ session('success') }}</div>
+    @endif
+    @if(session('error'))
+        <div class="alert alert-danger mt-3">{{ session('error') }}</div>
+    @endif
 </div>
-
-@if(session('success'))
-    <div class="alert alert-success">{{ session('success') }}</div>
-@endif
-@if(session('error'))
-    <div class="alert alert-danger">{{ session('error') }}</div>
-@endif
-
 @endsection
