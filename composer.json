@@ -6,7 +6,7 @@
     "license": "MIT",
     "require": {
         "php": "^8.0|^8.1|^8.2",
-        "doctrine/dbal": ">3.6",
+        "doctrine/dbal": "^3.6",
         "guzzlehttp/guzzle": "^7.9",
         "illuminate/http": "^8.0|^9.0|^10.0|^11.0",
         "illuminate/support": "^8.0|^9.0|^10.0|^11.0",
@@ -19,7 +19,8 @@
         "safaricom/mpesa": "^1.0",
         "yajra/laravel-datatables-buttons": "^9.0",
         "yajra/laravel-datatables-html": "^9.0",
-        "yajra/laravel-datatables-oracle": "^10.0"
+        "yajra/laravel-datatables-oracle": "^10.0",
+        "nesbot/carbon": "^2.72"
     },
     "require-dev": {
         "fakerphp/faker": "^1.9.1",
