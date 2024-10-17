@@ -4,28 +4,15 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\PaymentController;
-
-/*
-|--------------------------------------------------------------------------
-| Web Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register web routes for your application. These
-| routes are loaded by the RouteServiceProvider and all of them will
-| be assigned to the "web" middleware group. Make something great!
-|
-*/
+use App\Http\Controllers\MpesaController;
 
 Route::get('/', function () {
     return view('welcome');
 });
 
-Auth::routes([
-    'verify' => true
-]);
+Auth::routes(['verify' => true]);
 
 Route::get('/mpesa/pay', [MpesaController::class, 'pay'])->name('mpesa.pay');
-
 Route::get('/api/mpesa/callback', [MpesaController::class, 'callback'])->name('mpesa.callback');
 
 Route::controller(PaymentController::class)
@@ -46,19 +33,18 @@ Route::controller(PaymentController::class)
         Route::get('/b2ctimeout', 'b2cTimeout')->name('b2ctimeout');
     });
 
-Route::post('/payments/stkcallback', [PaymentController::class, 'stkCallback']);
-
 Route::post('/generate-qr', [PaymentController::class, 'generateQRCode']);
-
 Route::post('/check-email', [UserController::class, 'checkUserEmail']);
-
 Route::post('/payments', [PaymentController::class, 'callback']);
 
-Route::get('/initiatepush', [PaymentController::class, 'initiateStkPush']);
+// Remove this duplicate route definition
+// Route::post('/payments/initiatepush', [PaymentController::class, 'initiatePush']); // Commented out for clarity
 
-Route::get('/accounts', function () {return view('accounts');});
+Route::get('/accounts', function () {
+    return view('accounts');
+});
 
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home')->middleware('verified');
+Route::get('/home', [HomeController::class, 'index'])->name('home')->middleware('verified');
 
 Route::resource('admin/employees', App\Http\Controllers\Admin\employeesController::class)
     ->names([

@@ -52,7 +52,7 @@ class PaymentController extends Controller
         $PartyA = $request->input('phone');
         $PartyB = 174379;
         $PhoneNumber = $PartyA;
-        $CallBackURL = 'https://8c28-196-207-169-62.ngrok-free.app/payments/stkCallback'; // Update with your correct URL
+        $CallBackURL = 'https://595f-196-207-169-62.ngrok-free.app/payments/stkCallback'; // Update with your correct URL
         $AccountReference = 'Fees structure'; // Update as needed
         $TransactionDesc = 'payment for fees'; // Update as needed
     
@@ -169,8 +169,8 @@ public function stkQuery(){
         $url='https://sandbox.safaricom.co.ke/mpesa/c2b/v1/registerurl';
         $ShortCode=600992;
         $ResponseType='Completed';  //Cancelled
-        $ConfirmationURL='https://8c28-196-207-169-62.ngrok-free.app/payments/confirmation';
-        $ValidationURL='https://8c28-196-207-169-62.ngrok-free.app/payments/validation';
+        $ConfirmationURL='https://595f-196-207-169-62.ngrok-free.app/payments/confirmation';
+        $ValidationURL='https://595f-196-207-169-62.ngrok-free.app/payments/validation';
 
         $response=Http::withToken($accessToken)->post($url,[
             'ShortCode'=>$ShortCode,
@@ -265,34 +265,26 @@ public function stkQuery(){
         
     }
     
-    public function qrcode() {
-        $consumerKey = config('safaricom.consumer_key');
-        $consumerSecret = config('safaricom.consumer_secret');
-        $env = config('safaricom.env');
+    public function accounts(Request $request)
+    {
+        // Get dynamic input, or use defaults for testing
+        $tillNumber = $request->input('till_number', '9922091');
+        $amount = $request->input('amount', 100);
+        $referenceNumber = $request->input('reference_number', 'ABC123');
         
-        // Determine the correct URL based on the environment
-        $authUrl = $env === 'sandbox' 
-            ? 'https://sandbox.safaricom.co.ke/oauth/v1/generate?grant_type=client_credentials'
-            : 'https://api.safaricom.co.ke/oauth/v1/generate?grant_type=client_credentials';
+        // Encode QR code data
+        $qrCodeData = json_encode([
+            'till_number' => $tillNumber,
+            'amount' => $amount,
+            'reference_number' => $referenceNumber,
+            'payment_url' => 'https://your-payment-processing-url.com',
+        ]);
     
-        // Get access token
-        $request = Http::withBasicAuth($consumerKey, $consumerSecret)->get($authUrl);
-     
-        // Check if the access token was retrieved successfully
-        if (!$request->successful() || !isset($request['access_token'])) {
-            \Log::error('Access token retrieval failed', [
-                'status' => $request->status(),
-                'body' => $request->json()
-            ]);
-            return response()->json([
-                'error' => 'Unable to retrieve access token.',
-                'details' => $request->json()
-            ], 500);
-        }
+        // Pass this QR code data to the view
+        return view('accounts', compact('qrCodeData'));
+    }
     
-        // If the access token is retrieved successfully, return it
-        return response()->json($request->json()); 
-    }    
+
         public function b2c(){
             $accessToken=$this->token();
             $IntiatorName='testapi';
@@ -313,8 +305,8 @@ public function stkQuery(){
             $PartyA=600998;
             $PartyB=254708374149;
             $Remarks='remarks';
-            $QueryTimeOutURL='https://8c28-196-207-169-62.ngrok-free.app/payments/b2ctimeout';
-            $ResultURL='https://8c28-196-207-169-62.ngrok-free.app/payments/b2cresult';
+            $QueryTimeOutURL='https://595f-196-207-169-62.ngrok-free.app/payments/b2ctimeout';
+            $ResultURL='https://595f-196-207-169-62.ngrok-free.app/payments/b2cresult';
             $Occassion='fees payment';
             $url='https://sandbox.safaricom.co.ke/mpesa/b2c/v3/paymentrequest';
 
@@ -343,4 +335,7 @@ public function stkQuery(){
             $data=file_get_contents('php://input');
             Storage::disk('local')->put('b2ctimeout.txt', $data);
         }
+
+
+
     }
