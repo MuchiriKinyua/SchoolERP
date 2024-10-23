@@ -38,71 +38,74 @@ class PaymentController extends Controller
    }
 
    public function initiateStkPush(Request $request)
-    {
-        $accessToken = $this->token();
-        $url = 'https://sandbox.safaricom.co.ke/mpesa/stkpush/v1/processrequest';
-        $PassKey = 'bfb279f9aa9bdbcf158e97dd71a467cd2e0c893059b10f78e6b72ada1ed2c919';
-        $BusinessShortCode = 174379;
-        $Timestamp = Carbon::now()->format('YmdHis');
-        $password = base64_encode($BusinessShortCode . $PassKey . $Timestamp);
-        $TransactionType = 'CustomerPayBillOnline';
+{
+    $accessToken = $this->token();
+    $url = 'https://sandbox.safaricom.co.ke/mpesa/stkpush/v1/processrequest';
+    $PassKey = 'bfb279f9aa9bdbcf158e97dd71a467cd2e0c893059b10f78e6b72ada1ed2c919';
+    $BusinessShortCode = 174379;
+    $Timestamp = Carbon::now()->format('YmdHis');
+    $password = base64_encode($BusinessShortCode . $PassKey . $Timestamp);
+    $TransactionType = 'CustomerPayBillOnline';
     
-        // Request inputs
-        $Amount = $request->input('amount');
-        $PartyA = $request->input('phone');
-        $PartyB = 174379;
-        $PhoneNumber = $PartyA;
-        $CallBackURL = 'https://595f-196-207-169-62.ngrok-free.app/payments/stkCallback'; // Update with your correct URL
-        $AccountReference = 'Fees structure'; // Update as needed
-        $TransactionDesc = 'payment for fees'; // Update as needed
-    
-        try {
-            // Send the STK push request to Safaricom API
-            $response = Http::withToken($accessToken)->post($url, [
-                'BusinessShortCode' => $BusinessShortCode,
-                'Password' => $password,
-                'Timestamp' => $Timestamp,
-                'TransactionType' => $TransactionType,
-                'Amount' => $Amount,
-                'PartyA' => $PartyA,
-                'PartyB' => $PartyB,
-                'PhoneNumber' => $PhoneNumber,
-                'CallBackURL' => $CallBackURL,
-                'AccountReference' => $AccountReference,
-                'TransactionDesc' => $TransactionDesc
-            ]);
-    
-            // Decode the JSON response body
-            $res = json_decode($response->body());
-    
-            // Check if ResponseCode exists before accessing it
-            if (isset($res->ResponseCode) && $res->ResponseCode == 0) {
-                // Success, extract details
-                $MerchantRequestID = $res->MerchantRequestID;
-                $CheckoutRequestID = $res->CheckoutRequestID;
-                $CustomerMessage = $res->CustomerMessage;
-    
-                // Save the transaction details to the database
-                $payment = new STKrequests();
-                $payment->phone = $PhoneNumber;
-                $payment->amount = $Amount;
-                $payment->reference = $AccountReference;
-                $payment->description = $TransactionDesc;
-                $payment->MerchantRequestID = $MerchantRequestID;
-                $payment->CheckoutRequestID = $CheckoutRequestID;
-                $payment->status = 'Requested';
-                $payment->save();
-    
-                return $CustomerMessage; 
-    
-            } else {
-                return redirect()->back()->with('error', 'Transaction failed. Response: ' . json_encode($res));
-            }
-    
-        } catch (Throwable $e) {
-            return redirect()->back()->with('error', 'Error: ' . $e->getMessage());
+    // Request inputs
+    $Amount = $request->input('amount');
+    $PartyA = $request->input('phone');
+    $PartyB = 174379;
+    $PhoneNumber = $PartyA;
+    $CallBackURL = 'https://5995-196-207-169-62.ngrok-free.app/payments/stkCallback'; // Update with your correct URL
+    $AccountReference = 'Fees structure'; // Update as needed
+    $TransactionDesc = 'payment for fees'; // Update as needed
+    $Name = $request->input('name'); // Add name input
+
+    try {
+        // Send the STK push request to Safaricom API
+        $response = Http::withToken($accessToken)->post($url, [
+            'BusinessShortCode' => $BusinessShortCode,
+            'Password' => $password,
+            'Timestamp' => $Timestamp,
+            'TransactionType' => $TransactionType,
+            'Amount' => $Amount,
+            'PartyA' => $PartyA,
+            'PartyB' => $PartyB,
+            'PhoneNumber' => $PhoneNumber,
+            'CallBackURL' => $CallBackURL,
+            'AccountReference' => $AccountReference,
+            'TransactionDesc' => $TransactionDesc
+        ]);
+
+        // Decode the JSON response body
+        $res = json_decode($response->body());
+
+        // Check if ResponseCode exists before accessing it
+        if (isset($res->ResponseCode) && $res->ResponseCode == 0) {
+            // Success, extract details
+            $MerchantRequestID = $res->MerchantRequestID;
+            $CheckoutRequestID = $res->CheckoutRequestID;
+            $CustomerMessage = $res->CustomerMessage;
+
+            // Save the transaction details to the database
+            $payment = new STKrequests();
+            $payment->phone = $PhoneNumber;
+            $payment->amount = $Amount;
+            $payment->name = $Name; // Save name
+            $payment->reference = $AccountReference;
+            $payment->description = $TransactionDesc;
+            $payment->MerchantRequestID = $MerchantRequestID;
+            $payment->CheckoutRequestID = $CheckoutRequestID;
+            $payment->status = 'Requested';
+            $payment->save();
+
+            return $CustomerMessage; 
+
+        } else {
+            return redirect()->back()->with('error', 'Transaction failed. Response: ' . json_encode($res));
         }
+
+    } catch (Throwable $e) {
+        return redirect()->back()->with('error', 'Error: ' . $e->getMessage());
     }
+}
+
     
 
     public function stkCallback() {
@@ -169,8 +172,8 @@ public function stkQuery(){
         $url='https://sandbox.safaricom.co.ke/mpesa/c2b/v1/registerurl';
         $ShortCode=600992;
         $ResponseType='Completed';  //Cancelled
-        $ConfirmationURL='https://595f-196-207-169-62.ngrok-free.app/payments/confirmation';
-        $ValidationURL='https://595f-196-207-169-62.ngrok-free.app/payments/validation';
+        $ConfirmationURL='https://5995-196-207-169-62.ngrok-free.app/payments/confirmation';
+        $ValidationURL='https://5995-196-207-169-62.ngrok-free.app/payments/validation';
 
         $response=Http::withToken($accessToken)->post($url,[
             'ShortCode'=>$ShortCode,
@@ -266,74 +269,100 @@ public function stkQuery(){
     }
     
     public function accounts(Request $request)
-    {
-        // Get dynamic input, or use defaults for testing
-        $tillNumber = $request->input('till_number', '9922091');
-        $amount = $request->input('amount', 100);
-        $referenceNumber = $request->input('reference_number', 'ABC123');
+{
+    // Get dynamic input, or use defaults for testing
+    $tillNumber = $request->input('till_number', '9922091');
+    $amount = $request->input('amount', 100);
+    $referenceNumber = $request->input('reference_number', 'ABC123');
+    
+    // Prepare QR code data
+    $qrCodeData = [
+        'till_number' => $tillNumber,
+        'amount' => $amount,
+        'reference_number' => $referenceNumber,
+        'payment_url' => 'https://your-payment-processing-url.com',
+    ];
+
+    // Encode to a JSON string (optional, if you need it in this format for other purposes)
+    $qrCodeDataString = json_encode($qrCodeData);
+
+    // Pass this QR code data to the view
+    return view('accounts', compact('qrCodeDataString', 'qrCodeData'));
+}
+
+    
+
+    public function b2b(Request $request){
+        // Retrieve Access Token
+        $accessToken = $this->token();
+        $IntiatorName = 'testapi';
+        $IntiatorPassword = 'safaricom123!';
+        $path = Storage::disk('local')->get('SandboxCertificate.cer');
+        $pk = openssl_get_publickey($path);
+    
+        // Encrypt password
+        openssl_public_encrypt(
+            $IntiatorPassword,
+            $encrypted,
+            $pk,
+            $padding = OPENSSL_PKCS1_PADDING
+        );
         
-        // Encode QR code data
-        $qrCodeData = json_encode([
-            'till_number' => $tillNumber,
-            'amount' => $amount,
-            'reference_number' => $referenceNumber,
-            'payment_url' => 'https://your-payment-processing-url.com',
+        // Encrypted security credential
+        $SecurityCredential = base64_encode($encrypted);
+    
+        // API request parameters
+        $CommandID = 'SalaryPayment'; // Possible options: BusinessPayment, PromotionPayment, etc.
+        $Amount = 1;
+        $PartyA = $request->input('paybill'); // Paybill number input from form
+        $PartyB = $request->input('account_number'); // Account number input from form
+        $Remarks = 'remarks';
+        $QueueTimeOutURL = 'https://5995-196-207-169-62.ngrok-free.app/payments/b2btimeout';
+        $ResultURL = 'https://5995-196-207-169-62.ngrok-free.app/payments/b2bresult';
+        $Occassion = 'fees payment';
+        
+        // Correct API URL for B2B
+        $url = 'https://sandbox.safaricom.co.ke/mpesa/b2b/v1/paymentrequest';
+    
+        // Send API request
+        $response = Http::withToken($accessToken)->post($url, [
+            'InitiatorName' => $IntiatorName,
+            'SecurityCredential' => $SecurityCredential,
+            'CommandID' => $CommandID,
+            'Amount' => $Amount,
+            'PartyA' => $PartyA,  // Paybill
+            'PartyB' => $PartyB,  // Account number or phone number
+            'Remarks' => $Remarks,
+            'QueueTimeOutURL' => $QueueTimeOutURL,
+            'ResultURL' => $ResultURL,
+            'Occassion' => $Occassion,
         ]);
     
-        // Pass this QR code data to the view
-        return view('accounts', compact('qrCodeData'));
+        // Check response status and return success/failure messages
+        if ($response->successful()) {
+            // Handle success
+            return response()->json([
+                'message' => 'B2B Payment request successful',
+                'response' => $response->json(),
+            ], 200);
+        } else {
+            // Handle error
+            return response()->json([
+                'message' => 'B2B Payment request failed',
+                'response' => $response->json(),
+            ], 400);
+        }
     }
     
-
-        public function b2c(){
-            $accessToken=$this->token();
-            $IntiatorName='testapi';
-            $IntiatorPassword='safaricom123!';
-            $path=Storage::disk('local')->get('SandboxCertificate.cer');
-            $pk=openssl_get_publickey($path);
-
-            openssl_public_encrypt(
-                $IntiatorPassword,
-                $encrypted,
-                $pk,
-                $padding=OPENSSL_PKCS1_PADDING
-            );
-            //encrypted
-            $SecurityCredential=base64_encode($encrypted);
-            $CommandID='SalaryPayment'; //BusinessPayment PromotionPayment
-            $Amount=1;
-            $PartyA=600998;
-            $PartyB=254708374149;
-            $Remarks='remarks';
-            $QueryTimeOutURL='https://595f-196-207-169-62.ngrok-free.app/payments/b2ctimeout';
-            $ResultURL='https://595f-196-207-169-62.ngrok-free.app/payments/b2cresult';
-            $Occassion='fees payment';
-            $url='https://sandbox.safaricom.co.ke/mpesa/b2c/v3/paymentrequest';
-
-            $response=Http::withToken($accessToken)->post($url,[
-                'InitiatorName'=>$IntiatorName,
-                'SecurityCredential'=>$SecurityCredential,
-                'CommandID'=>$CommandID,
-                'Amount'=>$Amount,
-                'PartyA'=>$PartyA,
-                'PartyB'=>$PartyB,
-                'Remarks'=>$Remarks,
-                'QueueTimeOutURL'=>$QueryTimeOutURL,
-                'ResultURL'=>$ResultURL,
-                'Occassion'=>$Occassion
-            ]);
-            return $response;                
-
-        }
         
-        public function b2cResult(){
+        public function b2bResult(){
             $data=file_get_contents('php://input');
-            Storage::disk('local')->put('b2cresponse.txt', $data);
+            Storage::disk('local')->put('b2bresponse.txt', $data);
         }
 
         public function b2Timeout(){
             $data=file_get_contents('php://input');
-            Storage::disk('local')->put('b2ctimeout.txt', $data);
+            Storage::disk('local')->put('b2btimeout.txt', $data);
         }
 
 
