@@ -267,30 +267,26 @@ public function stkQuery(){
         ]);
         
     }
-    
-    public function accounts(Request $request)
+
+    public function generateQRCode(Request $request)
 {
-    // Get dynamic input, or use defaults for testing
-    $tillNumber = $request->input('till_number', '9922091');
-    $amount = $request->input('amount', 100);
+    $tillNumber = '9922091'; // This could also come from the request
+    $amount = $request->input('amount', 1);
     $referenceNumber = $request->input('reference_number', 'ABC123');
-    
-    // Prepare QR code data
+    $paymentUrl = 'https://your-payment-processing-url.com'; // Update this
+
     $qrCodeData = [
         'till_number' => $tillNumber,
         'amount' => $amount,
         'reference_number' => $referenceNumber,
-        'payment_url' => 'https://your-payment-processing-url.com',
+        'payment_url' => $paymentUrl,
     ];
 
-    // Encode to a JSON string (optional, if you need it in this format for other purposes)
+    // Pass the JSON encoded data to the view
     $qrCodeDataString = json_encode($qrCodeData);
-
-    // Pass this QR code data to the view
-    return view('accounts', compact('qrCodeDataString', 'qrCodeData'));
+    return view('views.accounts', compact('qrCodeDataString'));
 }
 
-    
 
     public function b2b(Request $request){
         // Retrieve Access Token

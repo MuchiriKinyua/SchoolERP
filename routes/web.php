@@ -27,18 +27,14 @@ Route::controller(PaymentController::class)
         Route::post('/validation', 'Validation')->name('validation');
         Route::post('/confirmation', 'Confirmation')->name('confirmation');
         Route::get('/simulate', 'Simulate')->name('simulate');
-        Route::get('/qrcode', 'qrcode')->name('qrcode');
         Route::post('/b2b', 'b2b')->name('b2b');
         Route::get('/b2bresult', 'b2bResult')->name('b2bresult');
         Route::get('/b2btimeout', 'b2bTimeout')->name('b2btimeout');
     });
 
-Route::post('/generate-qr', [PaymentController::class, 'generateQRCode']);
+Route::get('/generate-qr-code', [PaymentController::class, 'generateQrCode']);
 Route::post('/check-email', [UserController::class, 'checkUserEmail']);
 Route::post('/payments', [PaymentController::class, 'callback']);
-
-// Remove this duplicate route definition
-// Route::post('/payments/initiatepush', [PaymentController::class, 'initiatePush']); // Commented out for clarity
 
 Route::get('/accounts', function () {
     return view('accounts');
