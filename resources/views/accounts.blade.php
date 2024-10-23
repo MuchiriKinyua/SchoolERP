@@ -64,12 +64,13 @@
         </div>
 
         <div class="tab-pane fade" id="qrcode" role="tabpanel" aria-labelledby="qrcode-tab">
-    <p>Please scan the image below to make the transaction:</p>
+            <p>Please scan the image below to make the transaction:</p>
     
-    <div class="text-center">
-        {!! QrCode::size(250)->generate($qrCodeDataString) !!}
+        <div class="text-center">
+            {!! QrCode::size(250)->generate($qrCodeMessage) !!}
+        </div>
     </div>
-</div>
+
 
 
 

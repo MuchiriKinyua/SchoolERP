@@ -41,6 +41,9 @@ $app->singleton(
     App\Exceptions\Handler::class
 );
 
+error_reporting(E_ALL & ~E_DEPRECATED);
+
+
 /*
 |--------------------------------------------------------------------------
 | Return The Application

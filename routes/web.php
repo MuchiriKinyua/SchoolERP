@@ -6,13 +6,14 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\MpesaController;
 
+
 Route::get('/', function () {
     return view('welcome');
 });
 
 Auth::routes(['verify' => true]);
 
-Route::get('/mpesa/pay', [MpesaController::class, 'pay'])->name('mpesa.pay');
+// Route::get('/mpesa/pay', [MpesaController::class, 'pay'])->name('mpesa.pay');
 Route::get('/api/mpesa/callback', [MpesaController::class, 'callback'])->name('mpesa.callback');
 
 Route::controller(PaymentController::class)
@@ -33,14 +34,12 @@ Route::controller(PaymentController::class)
     });
 
 Route::get('/generate-qr-code', [PaymentController::class, 'generateQRCode'])->name('generate.qr.code');
-Route::get('/accounts', [PaymentController::class, 'showAccounts'])->name('show.accounts');
-Route::get('/accounts', [PaymentController::class, 'showAccounts'])->name('show.accounts');
+Route::get('/accounts', function () {
+    return redirect('/generate-qr-code');
+});
+// Route::get('/accounts', [PaymentController::class, 'showAccounts'])->name('show.accounts');
 Route::post('/check-email', [UserController::class, 'checkUserEmail']);
 Route::post('/payments', [PaymentController::class, 'callback']);
-
-Route::get('/accounts', function () {
-    return view('accounts');
-});
 
 Route::get('/home', [HomeController::class, 'index'])->name('home')->middleware('verified');
 

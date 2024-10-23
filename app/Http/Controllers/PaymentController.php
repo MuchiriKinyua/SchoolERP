@@ -278,30 +278,20 @@ public function showAccounts(Request $request)
     return $this->createQRCodeData($request); // Reuse the same logic for generating QR code
 }
 
-// Private method to generate QR code data
-private function createQRCodeData(Request $request)
+// public method to generate QR code data
+public function createQRCodeData(Request $request)
 {
     $tillNumber = '9922091'; // This could also come from the request
     $amount = $request->input('amount', 1);
     $referenceNumber = $request->input('reference_number', 'ABC123');
     $paymentUrl = 'https://your-payment-processing-url.com'; // Update this
 
-    $qrCodeData = [
-        'till_number' => $tillNumber,
-        'amount' => $amount,
-        'reference_number' => $referenceNumber,
-        'payment_url' => $paymentUrl,
-    ];
+    // Create a custom message for the QR code
+    $qrCodeMessage = "Do you want to pay Kshs. {$amount} to Daraja-sandbox Account no. {$tillNumber}, enter pin number.";
 
-    // Pass the JSON encoded data to the view
-    $qrCodeDataString = json_encode($qrCodeData);
-
-    // Return the accounts view with the QR code data
-    return view('accounts', compact('qrCodeDataString')); // Adjust the view if necessary
+    // Return the accounts view with the QR code message
+    return view('accounts', compact('qrCodeMessage')); // Pass the custom message
 }
-
-
-
 
     public function b2b(Request $request){
         // Retrieve Access Token
