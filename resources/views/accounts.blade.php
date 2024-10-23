@@ -63,14 +63,15 @@
             </form>
         </div>
 
-        <!-- QR Code Tab -->
-<div class="tab-pane fade" id="qrcode" role="tabpanel" aria-labelledby="qrcode-tab">
+        <div class="tab-pane fade" id="qrcode" role="tabpanel" aria-labelledby="qrcode-tab">
     <p>Please scan the image below to make the transaction:</p>
     
     <div class="text-center">
-        {!! QrCode::size(250)->generate("qrCodeDataString") !!}
+        {!! QrCode::size(250)->generate($qrCodeDataString) !!}
     </div>
 </div>
+
+
 
     <!-- Display success or error messages -->
     @if(session('success'))

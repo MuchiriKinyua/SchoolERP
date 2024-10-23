@@ -268,7 +268,18 @@ public function stkQuery(){
         
     }
 
-    public function generateQRCode(Request $request)
+   public function generateQRCode(Request $request)
+{
+    return $this->createQRCodeData($request); // Call the shared method for QR code data
+}
+
+public function showAccounts(Request $request)
+{
+    return $this->createQRCodeData($request); // Reuse the same logic for generating QR code
+}
+
+// Private method to generate QR code data
+private function createQRCodeData(Request $request)
 {
     $tillNumber = '9922091'; // This could also come from the request
     $amount = $request->input('amount', 1);
@@ -284,8 +295,12 @@ public function stkQuery(){
 
     // Pass the JSON encoded data to the view
     $qrCodeDataString = json_encode($qrCodeData);
-    return view('views.accounts', compact('qrCodeDataString'));
+
+    // Return the accounts view with the QR code data
+    return view('accounts', compact('qrCodeDataString')); // Adjust the view if necessary
 }
+
+
 
 
     public function b2b(Request $request){

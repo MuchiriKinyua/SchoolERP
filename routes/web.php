@@ -32,7 +32,9 @@ Route::controller(PaymentController::class)
         Route::get('/b2btimeout', 'b2bTimeout')->name('b2btimeout');
     });
 
-Route::get('/generate-qr-code', [PaymentController::class, 'generateQrCode']);
+Route::get('/generate-qr-code', [PaymentController::class, 'generateQRCode'])->name('generate.qr.code');
+Route::get('/accounts', [PaymentController::class, 'showAccounts'])->name('show.accounts');
+Route::get('/accounts', [PaymentController::class, 'showAccounts'])->name('show.accounts');
 Route::post('/check-email', [UserController::class, 'checkUserEmail']);
 Route::post('/payments', [PaymentController::class, 'callback']);
 
