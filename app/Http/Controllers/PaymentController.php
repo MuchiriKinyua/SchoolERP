@@ -293,67 +293,72 @@ public function stkQuery(){
     }
     
 
-    public function b2b(Request $request){
+    public function b2b(Request $request) {
         // Retrieve Access Token
-        $accessToken = $this->token();
-        $IntiatorName = 'testapi';
-        $IntiatorPassword = 'safaricom123!';
-        $path = Storage::disk('local')->get('SandboxCertificate.cer');
-        $pk = openssl_get_publickey($path);
+        $accessToken = $this->token();  // Assuming this is your function for token retrieval
     
-        // Encrypt password
+        // Set Initiator details
+        $InitiatorName = 'testapi';  // Replace with actual Initiator Name
+        $InitiatorPassword = 'safaricom123!';  // Replace with the actual password
+        $certificatePath = Storage::disk('local')->get('SandboxCertificate.cer');  // Load the certificate
+    
+        // Get the public key from the certificate
+        $pk = openssl_get_publickey($certificatePath);
+    
+        // Encrypt the Initiator Password using the public key
         openssl_public_encrypt(
-            $IntiatorPassword,
-            $encrypted,
+            $InitiatorPassword,
+            $encryptedPassword,
             $pk,
-            $padding = OPENSSL_PKCS1_PADDING
+            OPENSSL_PKCS1_PADDING
         );
-        
-        // Encrypted security credential
-        $SecurityCredential = base64_encode($encrypted);
     
-        // API request parameters
-        $CommandID = 'SalaryPayment'; // Possible options: BusinessPayment, PromotionPayment, etc.
-        $Amount = 1;
-        $PartyA = $request->input('paybill'); // Paybill number input from form
-        $PartyB = $request->input('account_number'); // Account number input from form
-        $Remarks = 'remarks';
+        // Convert the encrypted password into base64 encoding
+        $SecurityCredential = base64_encode($encryptedPassword);
+    
+        // Define API parameters
+        $CommandID = 'SalaryPayment';  
+        $Amount = $request->input('amount');
+        $PartyA = $request->input('paybill'); 
+        $PartyB = $request->input('account_number');  
+        $Remarks = 'Payment remarks';  
         $QueueTimeOutURL = 'https://01b7-196-207-169-62.ngrok-free.app/payments/b2btimeout';
-        $ResultURL = 'https://01b7-196-207-169-62.ngrok-free.app/payments/b2bresult';
-        $Occassion = 'fees payment';
-        
-        // Correct API URL for B2B
+        $ResultURL = 'https://01b7-196-207-169-62.ngrok-free.app/payments/b2bresult';  
+        $Occasion = 'fees payment';  
+    
+        // The correct URL for making the B2B request to Safaricom's sandbox
         $url = 'https://sandbox.safaricom.co.ke/mpesa/b2b/v1/paymentrequest';
     
-        // Send API request
+        // Make the HTTP request to Safaricom's API
         $response = Http::withToken($accessToken)->post($url, [
-            'InitiatorName' => $IntiatorName,
+            'InitiatorName' => $InitiatorName,
             'SecurityCredential' => $SecurityCredential,
             'CommandID' => $CommandID,
             'Amount' => $Amount,
-            'PartyA' => $PartyA,  // Paybill
-            'PartyB' => $PartyB,  // Account number or phone number
+            'PartyA' => $PartyA,
+            'PartyB' => $PartyB,
             'Remarks' => $Remarks,
             'QueueTimeOutURL' => $QueueTimeOutURL,
             'ResultURL' => $ResultURL,
-            'Occassion' => $Occassion,
+            'Occasion' => $Occasion,
         ]);
     
-        // Check response status and return success/failure messages
+        // Check the response from Safaricom
         if ($response->successful()) {
-            // Handle success
+            // Log and return a successful response
             return response()->json([
                 'message' => 'B2B Payment request successful',
                 'response' => $response->json(),
             ], 200);
         } else {
-            // Handle error
+            // Log and return a failed response
             return response()->json([
                 'message' => 'B2B Payment request failed',
                 'response' => $response->json(),
             ], 400);
         }
     }
+    
     
         
         public function b2bResult(){
