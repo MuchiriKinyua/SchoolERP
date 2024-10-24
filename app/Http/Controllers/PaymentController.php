@@ -52,7 +52,7 @@ class PaymentController extends Controller
     $PartyA = $request->input('phone');
     $PartyB = 174379;
     $PhoneNumber = $PartyA;
-    $CallBackURL = 'https://5995-196-207-169-62.ngrok-free.app/payments/stkCallback'; // Update with your correct URL
+    $CallBackURL = 'https://1d54-196-207-169-62.ngrok-free.app/payments/stkCallback'; // Update with your correct URL
     $AccountReference = 'Fees structure'; // Update as needed
     $TransactionDesc = 'payment for fees'; // Update as needed
     $Name = $request->input('name'); // Add name input
@@ -172,8 +172,8 @@ public function stkQuery(){
         $url='https://sandbox.safaricom.co.ke/mpesa/c2b/v1/registerurl';
         $ShortCode=600992;
         $ResponseType='Completed';  //Cancelled
-        $ConfirmationURL='https://5995-196-207-169-62.ngrok-free.app/payments/confirmation';
-        $ValidationURL='https://5995-196-207-169-62.ngrok-free.app/payments/validation';
+        $ConfirmationURL='https://1d54-196-207-169-62.ngrok-free.app/payments/confirmation';
+        $ValidationURL='https://1d54-196-207-169-62.ngrok-free.app/payments/validation';
 
         $response=Http::withToken($accessToken)->post($url,[
             'ShortCode'=>$ShortCode,
@@ -268,30 +268,30 @@ public function stkQuery(){
         
     }
 
-   public function generateQRCode(Request $request)
-{
-    return $this->createQRCodeData($request); // Call the shared method for QR code data
-}
-
-public function showAccounts(Request $request)
-{
-    return $this->createQRCodeData($request); // Reuse the same logic for generating QR code
-}
-
-// public method to generate QR code data
-public function createQRCodeData(Request $request)
-{
-    $tillNumber = '9922091'; // This could also come from the request
-    $amount = $request->input('amount', 1);
-    $referenceNumber = $request->input('reference_number', 'ABC123');
-    $paymentUrl = 'https://your-payment-processing-url.com'; // Update this
-
-    // Create a custom message for the QR code
-    $qrCodeMessage = "Do you want to pay Kshs. {$amount} to Daraja-sandbox Account no. {$tillNumber}, enter pin number.";
-
-    // Return the accounts view with the QR code message
-    return view('accounts', compact('qrCodeMessage')); // Pass the custom message
-}
+    public function generateQRCode(Request $request)
+    {
+        return $this->createQRCodeData($request); // Call the shared method for QR code data
+    }
+    
+    public function showAccounts(Request $request)
+    {
+        return $this->createQRCodeData($request); // Reuse the same logic for generating QR code
+    }
+    
+    // public method to generate QR code data
+    public function createQRCodeData(Request $request)
+    {
+        $tillNumber = '9922091'; 
+        $amount = 1; // Static amount
+        $referenceNumber = $request->input('reference_number', 'ABC123');
+        $paymentUrl = 'https://1d54-196-207-169-62.ngrok-free.app'; 
+    
+        $qrCodeMessage = "Please enter your pin to pay Kshs. {$amount} to Daraja-sandbox Account no. {$tillNumber}.";
+    
+        // Return the accounts view with the QR code message
+        return view('accounts', compact('qrCodeMessage')); // Prompt message
+    }
+    
 
     public function b2b(Request $request){
         // Retrieve Access Token
@@ -318,8 +318,8 @@ public function createQRCodeData(Request $request)
         $PartyA = $request->input('paybill'); // Paybill number input from form
         $PartyB = $request->input('account_number'); // Account number input from form
         $Remarks = 'remarks';
-        $QueueTimeOutURL = 'https://5995-196-207-169-62.ngrok-free.app/payments/b2btimeout';
-        $ResultURL = 'https://5995-196-207-169-62.ngrok-free.app/payments/b2bresult';
+        $QueueTimeOutURL = 'https://01b7-196-207-169-62.ngrok-free.app/payments/b2btimeout';
+        $ResultURL = 'https://01b7-196-207-169-62.ngrok-free.app/payments/b2bresult';
         $Occassion = 'fees payment';
         
         // Correct API URL for B2B

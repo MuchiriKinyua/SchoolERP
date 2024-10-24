@@ -37,7 +37,6 @@ Route::get('/generate-qr-code', [PaymentController::class, 'generateQRCode'])->n
 Route::get('/accounts', function () {
     return redirect('/generate-qr-code');
 });
-// Route::get('/accounts', [PaymentController::class, 'showAccounts'])->name('show.accounts');
 Route::post('/check-email', [UserController::class, 'checkUserEmail']);
 Route::post('/payments', [PaymentController::class, 'callback']);
 
